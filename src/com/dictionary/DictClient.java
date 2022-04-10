@@ -1,5 +1,6 @@
 package com.dictionary;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -11,14 +12,13 @@ import java.util.Scanner;
  * student id 903274
  */
 public class DictClient {
-    // driver code
+    private static String address;
+    private static int port;
     public static void main(String[] args) {
         if (2 != args.length) {
             throw new IllegalArgumentException
                     ("Please enter server address and port number");
         }
-        String address;
-        int port;
         try {
             address = args[0];
             port = Integer.parseInt(args[1]);
@@ -26,33 +26,40 @@ public class DictClient {
             throw new IllegalArgumentException
                     ("Error:" + e + ", Please enter correct server address and port number");
         }
+
+        ClientGUI clientGUI = new ClientGUI();
+        clientGUI.initialise();
+
+
+    }
+
+    public String query(DictRequest request) {
+        String result = "";
         try {
             Socket socket = new Socket(address, port);
 
-            PrintWriter output
-                    = new PrintWriter(new OutputStreamWriter(
-                            socket.getOutputStream(), StandardCharsets.UTF_8));
+            ObjectOutputStream output
+                    = new ObjectOutputStream(socket.getOutputStream());
 
-            BufferedReader in
-                    = new BufferedReader(new InputStreamReader(
-                    socket.getInputStream(), StandardCharsets.UTF_8));
+            ObjectInputStream input
+                    = new ObjectInputStream(socket.getInputStream());
 
-            Scanner sc = new Scanner(System.in);
-            String line = null;
+            output.writeObject(request);
+            output.flush();
 
-            while (!"exit".equalsIgnoreCase(line)) {
-
-                line = sc.nextLine();
-
-                output.println(line);
-                System.out.println(in.readLine());
-                output.flush();
-
+            DictResponse response = (DictResponse) input.readObject();
+            if (response.getSuccess()) {
+                result = response.getResult();
+            } else {
+                JOptionPane.showMessageDialog
+                        (null, response.getErrorMessage(),
+                                "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
             }
-            sc.close();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog
+                    (null, "Error: " + e + ", please try again",
+                            "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
         }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        return result;
     }
 }

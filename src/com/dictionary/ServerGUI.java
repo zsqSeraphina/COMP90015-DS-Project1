@@ -18,7 +18,7 @@ public class ServerGUI {
     }
 
     public void initialise() {
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("Dictionary Server");
         JPanel panel = new JPanel();
 
         panel.setBorder(BorderFactory.createEmptyBorder(200, 300, 200, 300));
@@ -44,7 +44,6 @@ public class ServerGUI {
 
         frame.add(panel, BorderLayout.CENTER);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Dictionary server");
         frame.setSize(300, 200);
         frame.pack();
         frame.setVisible(true);
