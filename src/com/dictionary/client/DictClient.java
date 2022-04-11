@@ -1,10 +1,11 @@
-package com.dictionary;
+package com.dictionary.client;
+
+import com.dictionary.util.DictRequest;
+import com.dictionary.util.DictResponse;
 
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.Scanner;
 
 
 /**
@@ -33,7 +34,7 @@ public class DictClient {
 
     }
 
-    public String query(DictRequest request) {
+    public String sendRequest(DictRequest request) {
         String result = "";
         try {
             Socket socket = new Socket(address, port);
@@ -50,6 +51,9 @@ public class DictClient {
             DictResponse response = (DictResponse) input.readObject();
             if (response.getSuccess()) {
                 result = response.getResult();
+                JOptionPane.showMessageDialog
+                        (null, "Success!",
+                                "Action Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog
                         (null, response.getErrorMessage(),

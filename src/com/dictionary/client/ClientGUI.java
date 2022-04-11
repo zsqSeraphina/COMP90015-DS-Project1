@@ -1,4 +1,7 @@
-package com.dictionary;
+package com.dictionary.client;
+
+import com.dictionary.util.DictRequest;
+import com.dictionary.util.RequestType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,10 +27,10 @@ public class ClientGUI {
         inputText.add(wordField);
         JButton query = new JButton("Query");
         query.setPreferredSize(new Dimension(100, 35));
-        JButton delete = new JButton("Delete");
-        delete.setPreferredSize(new Dimension(100, 35));
+        JButton remove = new JButton("Remove");
+        remove.setPreferredSize(new Dimension(100, 35));
         inputText.add(query);
-        inputText.add(delete);
+        inputText.add(remove);
 
         JPanel outputText = new JPanel();
         outputText.setBorder(BorderFactory.createEmptyBorder(10, 220, 200, 220));
@@ -53,14 +56,39 @@ public class ClientGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String word = wordField.getText();
-                if(word.isBlank()) {
-                    JOptionPane.showMessageDialog
-                            (null, "Please enter a word!",
-                                    "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
-                }
+
                 DictRequest request = new DictRequest(RequestType.QUERY, word, "");
-                String queryResult = client.query(request);
+                String queryResult = client.sendRequest(request);
                 meanField.setText(queryResult);
+            }
+        });
+
+        add.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String word = wordField.getText();
+                String mean = meanField.getText();
+                DictRequest request = new DictRequest(RequestType.ADD, word, mean);
+                client.sendRequest(request);
+            }
+        });
+
+        remove.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String word = wordField.getText();
+                DictRequest request = new DictRequest(RequestType.REMOVE, word, "");
+                client.sendRequest(request);
+            }
+        });
+
+        update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String word = wordField.getText();
+                String mean = meanField.getText();
+                DictRequest request = new DictRequest(RequestType.UPDATE, word, mean);
+                client.sendRequest(request);
             }
         });
     }

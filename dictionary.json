@@ -1,0 +1,1 @@
+{"hi":"hello","process":"Process is a subclass of Object class and it can describe the processes that are started by the exec() method of Runtime class. A Process object controls the process and gets information about it. The Process class is an abstract class, therefore, it cannot be instantiated.","thread":"a thread of execution in a program"}

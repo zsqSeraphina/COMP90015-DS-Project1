@@ -1,4 +1,4 @@
-package com.dictionary;
+package com.dictionary.util;
 
 /**
  * @author Siqi Zhou
@@ -7,6 +7,6 @@ package com.dictionary;
 public enum RequestType {
     QUERY,
     ADD,
-    DELETE,
+    REMOVE,
     UPDATE;
 }

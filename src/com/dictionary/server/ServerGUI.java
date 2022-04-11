@@ -1,4 +1,4 @@
-package com.dictionary;
+package com.dictionary.server;
 
 import javax.swing.*;
 import java.awt.*;
