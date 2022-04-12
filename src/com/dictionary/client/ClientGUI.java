@@ -22,12 +22,12 @@ public class ClientGUI {
         frame.setPreferredSize(new Dimension(1000, 600));
 
         JPanel inputText = new JPanel();
-        inputText.setBorder(BorderFactory.createEmptyBorder(160, 100, 10, 120));
-        JTextField wordField = new JTextField();
-        wordField.setPreferredSize(new Dimension(500, 35));
+        inputText.setBorder(BorderFactory.createEmptyBorder(160, 50, 10, 50));
+        JTextField wordField = new JTextField(60);
         JLabel wordLabel = new JLabel("Word: ");
         inputText.add(wordLabel);
         inputText.add(wordField);
+
         JButton query = new JButton("Query");
         query.setPreferredSize(new Dimension(100, 35));
         JButton remove = new JButton("Remove");
@@ -36,13 +36,16 @@ public class ClientGUI {
         inputText.add(remove);
 
         JPanel outputText = new JPanel();
-        outputText.setBorder(BorderFactory.createEmptyBorder(10, 100, 100, 120));
-        JTextArea meanField = new JTextArea();
-        meanField.setPreferredSize(new Dimension(500, 100));
+        outputText.setBorder(BorderFactory.createEmptyBorder(10, 50, 100, 50));
+        JTextArea meanField = new JTextArea(10, 60);
         meanField.setLineWrap(true);
+        meanField.setWrapStyleWord(true);
         JLabel meanLabel = new JLabel("Mean: ");
+        JScrollPane scroll = new JScrollPane(meanField);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         outputText.add(meanLabel);
-        outputText.add(meanField);
+        outputText.add(scroll);
+
         JButton add = new JButton("Add");
         add.setPreferredSize(new Dimension(100, 35));
         JButton update = new JButton("Update");

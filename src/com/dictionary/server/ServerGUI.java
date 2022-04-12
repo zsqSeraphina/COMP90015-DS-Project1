@@ -22,7 +22,7 @@ public class ServerGUI {
         JFrame frame = new JFrame("Dictionary Server");
 
         JPanel logPanel = new JPanel();
-        logPanel.setBorder(BorderFactory.createEmptyBorder(20, 100, 100, 150));
+        logPanel.setBorder(BorderFactory.createEmptyBorder(15, 100, 80, 150));
 
         JLabel logLabel = new JLabel("Action log");
         logLabel.setFont(new Font(null, Font.PLAIN, 20));
@@ -41,13 +41,13 @@ public class ServerGUI {
         frame.add(logPanel);
 
         JPanel portPanel = new JPanel();
-        portPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 20, 50));
+        portPanel.setBorder(BorderFactory.createEmptyBorder(80, 100, 15, 50));
         JLabel portLabel = new JLabel("Server is running on port");
         portLabel.setFont(new Font(null, Font.PLAIN, 20));
         portText = new JTextField(48);
-        portText.setFont(new Font(null, Font.PLAIN, 16));
+        portText.setFont(new Font(null, Font.PLAIN, 18));
         portText.setHorizontalAlignment(0);
-        portText.setPreferredSize(new Dimension(600, 50));
+        portText.setPreferredSize(new Dimension(600, 65));
         portText.setEnabled(false);
         portText.setDisabledTextColor(new Color(0, 0, 0));
         portPanel.add(portLabel);
