@@ -5,6 +5,8 @@ import java.io.Serializable;
 /**
  * @author Siqi Zhou
  * student id 903274
+ *
+ * class for storing all information of a request
  */
 public class DictRequest implements Serializable {
     private RequestType requestType;

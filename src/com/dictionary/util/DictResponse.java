@@ -5,11 +5,13 @@ import java.io.Serializable;
 /**
  * @author Siqi Zhou
  * student id 903274
+ *
+ * class for storing all information of a response
  */
 public class DictResponse implements Serializable {
     private Boolean isSuccess = false;
     private String result;
-    private String errorMessage;
+    private String message;
 
     public Boolean getSuccess() {
         return isSuccess;
@@ -27,11 +29,11 @@ public class DictResponse implements Serializable {
         this.result = result;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return message;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

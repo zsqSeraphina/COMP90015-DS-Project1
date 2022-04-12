@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
  * student id 903274
  */
 public class ServerGUI {
-    private JTextField textField;
+    private JTextArea actionLog;
+    private JTextField portText;
 
     public ServerGUI() {
 
@@ -19,34 +20,55 @@ public class ServerGUI {
 
     public void initialise() {
         JFrame frame = new JFrame("Dictionary Server");
-        JPanel panel = new JPanel();
 
-        panel.setBorder(BorderFactory.createEmptyBorder(200, 300, 200, 300));
-        panel.setLayout(new GridLayout(0, 1));
+        JPanel logPanel = new JPanel();
+        logPanel.setBorder(BorderFactory.createEmptyBorder(20, 100, 100, 150));
 
-        textField = new JTextField(16);
-        textField.setSize(100, 50);
-        textField.setToolTipText("Please enter a word");
-        panel.add(textField);
+        JLabel logLabel = new JLabel("Action log");
+        logLabel.setFont(new Font(null, Font.PLAIN, 20));
 
-        JButton button = new JButton("enquire");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String command = e.getActionCommand();
-                if (command.equals("enquire")) {
-                    System.out.println(textField.getText());
-                }
-            }
-        });
-        button.setSize(100, 50);
-        panel.add(button);
+        actionLog = new JTextArea(16, 58);
+        actionLog.setFont(new Font(null, Font.PLAIN, 12));
+        actionLog.setLineWrap(true);
+        actionLog.setWrapStyleWord(true);
+        actionLog.setEnabled(false);
+        actionLog.setDisabledTextColor(new Color(0, 0, 0));
 
-        frame.add(panel, BorderLayout.CENTER);
+        JScrollPane scroll = new JScrollPane(actionLog);
+        scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        logPanel.add(logLabel);
+        logPanel.add(scroll);
+        frame.add(logPanel);
+
+        JPanel portPanel = new JPanel();
+        portPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 20, 50));
+        JLabel portLabel = new JLabel("Server is running on port");
+        portLabel.setFont(new Font(null, Font.PLAIN, 20));
+        portText = new JTextField(48);
+        portText.setFont(new Font(null, Font.PLAIN, 16));
+        portText.setHorizontalAlignment(0);
+        portText.setPreferredSize(new Dimension(600, 50));
+        portText.setEnabled(false);
+        portText.setDisabledTextColor(new Color(0, 0, 0));
+        portPanel.add(portLabel);
+        portPanel.add(portText);
+
+        frame.getContentPane().add(BorderLayout.SOUTH, logPanel);
+        frame.getContentPane().add(BorderLayout.NORTH, portPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300, 200);
+        frame.setPreferredSize(new Dimension(1000, 600));
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    public void setPort(String port) {
+        portText.setText(port);
+    }
+
+    public void updateLog(String newLog) {
+        actionLog.setText(actionLog.getText() + "\n" + newLog
+                + "\n------------------------------------------------");
     }
 
 }

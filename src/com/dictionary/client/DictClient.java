@@ -20,6 +20,8 @@ public class DictClient {
             throw new IllegalArgumentException
                     ("Please enter server address and port number");
         }
+
+        /* get the address and port from arguments */
         try {
             address = args[0];
             port = Integer.parseInt(args[1]);
@@ -28,15 +30,24 @@ public class DictClient {
                     ("Error:" + e + ", Please enter correct server address and port number");
         }
 
+        /* create the client GUI */
         ClientGUI clientGUI = new ClientGUI();
         clientGUI.initialise();
 
 
     }
 
+    /**
+     * a common method sends all kinds of requests to the server side
+     *
+     * @param request DictRequest contains all required information
+     * @return result of the request
+     */
     public String sendRequest(DictRequest request) {
         String result = "";
         try {
+
+            /* use TCP/IP socket*/
             Socket socket = new Socket(address, port);
 
             ObjectOutputStream output
@@ -49,6 +60,8 @@ public class DictClient {
             output.flush();
 
             DictResponse response = (DictResponse) input.readObject();
+
+            /* informs the client whether the action is succeeded */
             if (response.getSuccess()) {
                 result = response.getResult();
                 JOptionPane.showMessageDialog
@@ -56,7 +69,7 @@ public class DictClient {
                                 "Action Success", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog
-                        (null, response.getErrorMessage(),
+                        (null, response.getMessage(),
                                 "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception e) {
