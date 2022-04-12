@@ -22,6 +22,7 @@ import org.json.simple.parser.ParseException;
 public class DictServer {
     private static String dictionary;
     private static ServerGUI serverGUI;
+    private static JSONObject dict;
     public static void main(String[] args) throws IOException {
 
         /* check the arguments and get the port and dictionary path */
@@ -39,6 +40,16 @@ public class DictServer {
             throw new IllegalArgumentException
                     ("Error:" + e
                             + ", Please enter correct port number and dictionary file path");
+        }
+
+        /* load dictionary from file into memory */
+        JSONParser parser = new JSONParser();
+        try {
+            dict = (JSONObject) parser.parse(new FileReader(dictionary));
+        } catch (IOException | ParseException e) {
+            JOptionPane.showMessageDialog
+                    (null, "Error: " + e,
+                            "Error", JOptionPane.INFORMATION_MESSAGE);
         }
 
         serverGUI = new ServerGUI();
@@ -135,24 +146,6 @@ public class DictServer {
     }
 
     /**
-     * get the dictionary as JSONObject from the given path
-     *
-     * @return the dictionary in JSONObject
-     */
-    private static JSONObject getDict(){
-        JSONParser parser = new JSONParser();
-        JSONObject dict = new JSONObject();
-        try {
-            dict = (JSONObject) parser.parse(new FileReader(dictionary));
-        } catch (IOException | ParseException e) {
-            JOptionPane.showMessageDialog
-                    (null, "Error: " + e,
-                            "Request Failed", JOptionPane.INFORMATION_MESSAGE);
-        }
-        return dict;
-    }
-
-    /**
      * handles the query request
      *
      * @param request DictRequest contains word to query
@@ -164,7 +157,7 @@ public class DictServer {
             response.setMessage("Failed, please enter a word!");
             return response;
         }
-        String mean = (String) getDict().get(request.getWord());
+        String mean = (String) dict.get(request.getWord());
         if (mean == null) {
             response.setMessage("Failed, word does not exist in the dictionary!");
         } else {
@@ -183,7 +176,6 @@ public class DictServer {
      */
     private static DictResponse handleAdd(DictRequest request) {
         DictResponse response = new DictResponse();
-        JSONObject dict = getDict();
         if (dict.get(request.getWord()) != null) {
             response.setMessage("Failed, word already exists in the dictionary!");
             return response;
@@ -222,7 +214,6 @@ public class DictServer {
             response.setMessage("Failed, please enter a word!");
             return response;
         }
-        JSONObject dict = getDict();
         if (dict.get(request.getWord()) == null) {
             response.setMessage("Failed, word does not exist in the dictionary!");
             return response;
@@ -255,7 +246,6 @@ public class DictServer {
             response.setMessage("Failed, please enter the word or meaning!");
             return response;
         }
-        JSONObject dict = getDict();
         if (dict.get(request.getWord()) == null) {
             response.setMessage("Failed, word does not exist in the dictionary!");
             return response;
