@@ -8,7 +8,7 @@ import java.io.Serializable;
  *
  * enum of all kinds of requests
  */
-public enum RequestType  implements Serializable {
+public enum RequestType implements Serializable {
     QUERY,
     ADD,
     REMOVE,

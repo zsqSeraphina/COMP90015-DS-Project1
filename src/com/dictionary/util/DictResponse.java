@@ -1,5 +1,6 @@
 package com.dictionary.util;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -9,6 +10,9 @@ import java.io.Serializable;
  * class for storing all information of a response
  */
 public class DictResponse implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -5776950265314210036L;
+
     private Boolean isSuccess = false;
     private String result;
     private String message;
