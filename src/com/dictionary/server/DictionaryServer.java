@@ -25,7 +25,7 @@ public class DictionaryServer {
     private static String dictionary;
     private static ServerGUI serverGUI;
     private static JSONObject dict;
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
 
         /* check the arguments and get the port and dictionary path */
         if (2 != args.length) {
@@ -52,6 +52,9 @@ public class DictionaryServer {
             JOptionPane.showMessageDialog
                     (null, "Error: " + e,
                             "Error", JOptionPane.INFORMATION_MESSAGE);
+            throw new IllegalArgumentException
+                    ("Error:" + e
+                            + ", Please give a valid dictionary");
         }
 
         serverGUI = new ServerGUI();
@@ -85,6 +88,9 @@ public class DictionaryServer {
             JOptionPane.showMessageDialog
                     (null, "Error: " + e,
                             "Request Failed", JOptionPane.INFORMATION_MESSAGE);
+            throw new Exception
+                    ("Error:" + e
+                            + ", request failed");
         }
     }
 
