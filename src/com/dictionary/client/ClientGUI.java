@@ -154,27 +154,25 @@ public class ClientGUI {
             String word = wordField.getText();
             DictRequest request = new DictRequest(RequestType.QUERY, word, new ArrayList<>(1));
             DictResponse response = client.sendRequest(request);
-            List<String> resultMean = response.getResult();
-            if (resultMean != null) {
-                if (resultMean.size() > 1) {
-                    for (int i = 0; i < resultMean.size(); i++) {
-                        if (i < meanList.size()) {
-                            meanList.get(i).setText(resultMean.get(i));
-                        } else {
-                            JTextArea meanArea1 = new JTextArea(3, 60);
-                            meanArea1.setLineWrap(true);
-                            meanArea1.setWrapStyleWord(true);
-                            meanArea1.setText(resultMean.get(i));
-                            meanList.add(meanArea1);
-                            JScrollPane scroll1 = new JScrollPane(meanArea1);
-                            scroll1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-                            meanPanel.setLayout(new GridLayout(meanList.size() + 1, 1));
-                            meanPanel.add(scroll1);
-                        }
-                    }
-                } else {
-                    meanArea.setText(response.getResult().get(0));
+            List<String> resultMeanList = response.getResult();
+            if (resultMeanList != null) {
+                for (Component component : meanPanel.getComponents()) {
+                    meanPanel.remove(component);
                 }
+                meanList.clear();
+                for (String resultMean : resultMeanList) {
+                    JTextArea meanArea1 = new JTextArea(3, 60);
+                    meanArea1.setLineWrap(true);
+                    meanArea1.setWrapStyleWord(true);
+                    meanArea1.setText(resultMean);
+                    meanList.add(meanArea1);
+                    JScrollPane scroll1 = new JScrollPane(meanArea1);
+                    scroll1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+                    meanPanel.setLayout(new GridLayout(meanList.size(), 1));
+                    meanPanel.add(scroll1);
+                }
+                meanPanel.revalidate();
+                meanPanel.repaint();
             }
             outputArea.setText(response.getMessage());
         });
