@@ -2,6 +2,7 @@ package com.dictionary.utils;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author Siqi Zhou
@@ -14,7 +15,7 @@ public class DictResponse implements Serializable {
     private static final long serialVersionUID = -5776950265314210036L;
 
     private Boolean isSuccess = false;
-    private String result;
+    private ArrayList<String> result;
     private String message;
 
     public Boolean getSuccess() {
@@ -25,11 +26,11 @@ public class DictResponse implements Serializable {
         isSuccess = success;
     }
 
-    public String getResult() {
+    public ArrayList<String> getResult() {
         return result;
     }
 
-    public void setResult(String result) {
+    public void setResult(ArrayList<String> result) {
         this.result = result;
     }
 

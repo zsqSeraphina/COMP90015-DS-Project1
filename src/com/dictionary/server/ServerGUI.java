@@ -2,6 +2,8 @@ package com.dictionary.server;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -23,7 +25,7 @@ public class ServerGUI {
         JLabel logLabel = new JLabel("Action log");
         logLabel.setFont(new Font(null, Font.PLAIN, 20));
 
-        actionLog = new JTextArea(16, 58);
+        actionLog = new JTextArea(16, 52);
         actionLog.setFont(new Font(null, Font.PLAIN, 12));
         actionLog.setLineWrap(true);
         actionLog.setWrapStyleWord(true);
@@ -34,6 +36,15 @@ public class ServerGUI {
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         logPanel.add(logLabel);
         logPanel.add(scroll);
+
+        JButton cleanLog = new JButton("clean");
+        cleanLog.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actionLog.setText("");
+            }
+        });
+        logPanel.add(cleanLog);
         frame.add(logPanel);
 
         JPanel portPanel = new JPanel();
@@ -70,7 +81,7 @@ public class ServerGUI {
 
     public void updateLog(String newLog) {
         actionLog.setText(actionLog.getText() + "\n" + newLog
-                + "\n------------------------------------------------");
+                + "\n    -------------------------------------------------------------------------------------------");
     }
 
 

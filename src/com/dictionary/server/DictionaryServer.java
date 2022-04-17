@@ -5,8 +5,10 @@ import com.dictionary.utils.DictResponse;
 
 import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -60,7 +62,7 @@ public class DictionaryServer {
 
             /* use TCP/IP socket */
             ServerSocket socket = new ServerSocket(port);
-            ExecutorService executor = Executors.newFixedThreadPool(5);
+            ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             Socket client;
 
             /* thread per request */
@@ -137,10 +139,10 @@ public class DictionaryServer {
                         output.flush();
                     }
                 }
-                serverGUI.updateLog("Client connected on " +
+                serverGUI.updateLog("    Client connected on " +
                         Thread.currentThread().getName() +
-                        "\nRequested for action: " + request.getRequestType().toString() +
-                        "\nAction result: " + response.getMessage()
+                        "\n    Requested for action: " + request.getRequestType().toString() +
+                        "\n    Action result: " + response.getMessage()
                         );
             } catch (IOException | ClassNotFoundException e) {
                 JOptionPane.showMessageDialog
@@ -162,7 +164,7 @@ public class DictionaryServer {
             response.setMessage("Failed, please enter a word!");
             return response;
         }
-        String mean = (String) dict.get(request.getWord());
+        ArrayList<String> mean = (ArrayList<String>) dict.get(request.getWord());
         if (mean == null) {
             response.setMessage("Failed, word does not exist in the dictionary!");
         } else {
@@ -186,7 +188,7 @@ public class DictionaryServer {
             return response;
         }
 
-        if (request.getWord().isBlank() || request.getMean().isBlank()) {
+        if (request.getWord().isBlank() || request.getMean().isEmpty()) {
             response.setMessage("Failed, please enter the word or meaning!");
             return response;
         }
@@ -241,7 +243,7 @@ public class DictionaryServer {
      */
     private static DictResponse handleUpdate(DictRequest request) {
         DictResponse response = new DictResponse();
-        if (request.getWord().isBlank() || request.getMean().isBlank()) {
+        if (request.getWord().isBlank() || request.getMean().isEmpty()) {
             response.setMessage("Failed, please enter the word or meaning!");
             return response;
         }

@@ -2,6 +2,7 @@ package com.dictionary.utils;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * @author Siqi Zhou
@@ -15,9 +16,9 @@ public class DictRequest implements Serializable {
 
     private RequestType requestType;
     private String word;
-    private String mean;
+    private ArrayList<String> mean;
 
-    public DictRequest(RequestType requestType, String word, String mean) {
+    public DictRequest(RequestType requestType, String word, ArrayList<String> mean) {
         this.requestType = requestType;
         this.word = word;
         this.mean = mean;
@@ -38,11 +39,11 @@ public class DictRequest implements Serializable {
         this.word = word;
     }
 
-    public String getMean() {
+    public ArrayList<String> getMean() {
         return mean;
     }
 
-    public void setMean(String mean) {
+    public void setMean(ArrayList<String> mean) {
         this.mean = mean;
     }
 }
