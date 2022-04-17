@@ -2,8 +2,8 @@ package com.dictionary.server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * @author Siqi Zhou
@@ -12,11 +12,7 @@ import java.awt.event.ActionListener;
 public class ServerGUI {
     private JTextArea actionLog;
     private JTextField portText;
-
-    public ServerGUI() {
-
-
-    }
+    private DictionaryServer dictionaryServer = new DictionaryServer();
 
     public void initialise() {
         JFrame frame = new JFrame("Dictionary Server");
@@ -60,6 +56,12 @@ public class ServerGUI {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                dictionaryServer.storeInDictionary();
+            }
+        });
     }
 
     public void setPort(String port) {
@@ -70,5 +72,7 @@ public class ServerGUI {
         actionLog.setText(actionLog.getText() + "\n" + newLog
                 + "\n------------------------------------------------");
     }
+
+
 
 }

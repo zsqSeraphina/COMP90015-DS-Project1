@@ -1,7 +1,7 @@
 package com.dictionary.client;
 
-import com.dictionary.util.DictRequest;
-import com.dictionary.util.DictResponse;
+import com.dictionary.utils.DictRequest;
+import com.dictionary.utils.DictResponse;
 
 import javax.swing.*;
 import java.io.*;
@@ -12,7 +12,7 @@ import java.net.Socket;
  * @author Siqi Zhou
  * student id 903274
  */
-public class DictClient {
+public class DictionaryClient {
     private static String address;
     private static int port;
     public static void main(String[] args) {
@@ -43,11 +43,11 @@ public class DictClient {
      * @param request DictRequest contains all required information
      * @return result of the request
      */
-    public String sendRequest(DictRequest request) {
-        String result = "";
+    public DictResponse sendRequest(DictRequest request) {
+        DictResponse response = null;
         try {
 
-            /* use TCP/IP socket*/
+            /* use TCP/IP socket */
             Socket socket = new Socket(address, port);
 
             ObjectOutputStream output
@@ -59,15 +59,10 @@ public class DictClient {
             output.writeObject(request);
             output.flush();
 
-            DictResponse response = (DictResponse) input.readObject();
+            response = (DictResponse) input.readObject();
 
             /* informs the client whether the action is succeeded */
-            if (response.getSuccess()) {
-                result = response.getResult();
-                JOptionPane.showMessageDialog
-                        (null, "Success!",
-                                "Action Success", JOptionPane.INFORMATION_MESSAGE);
-            } else {
+            if (!response.getSuccess()) {
                 JOptionPane.showMessageDialog
                         (null, response.getMessage(),
                                 "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
@@ -77,6 +72,6 @@ public class DictClient {
                     (null, "Error: " + e + ", please try again",
                             "Action Invalid", JOptionPane.INFORMATION_MESSAGE);
         }
-        return result;
+        return response;
     }
 }

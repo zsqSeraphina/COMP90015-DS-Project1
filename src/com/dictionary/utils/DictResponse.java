@@ -1,4 +1,4 @@
-package com.dictionary.util;
+package com.dictionary.utils;
 
 import java.io.Serial;
 import java.io.Serializable;

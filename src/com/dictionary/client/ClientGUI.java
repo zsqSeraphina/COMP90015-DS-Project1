@@ -1,7 +1,8 @@
 package com.dictionary.client;
 
-import com.dictionary.util.DictRequest;
-import com.dictionary.util.RequestType;
+import com.dictionary.utils.DictRequest;
+import com.dictionary.utils.DictResponse;
+import com.dictionary.utils.RequestType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ import java.awt.*;
  */
 public class ClientGUI {
 
-    DictClient client = new DictClient();
+    DictionaryClient client = new DictionaryClient();
 
     public void initialise() {
 
@@ -35,26 +36,36 @@ public class ClientGUI {
         inputText.add(query);
         inputText.add(remove);
 
-        JPanel outputText = new JPanel();
-        outputText.setBorder(BorderFactory.createEmptyBorder(10, 50, 100, 50));
-        JTextArea meanField = new JTextArea(10, 60);
-        meanField.setLineWrap(true);
-        meanField.setWrapStyleWord(true);
+        JPanel meanText = new JPanel();
+        meanText.setBorder(BorderFactory.createEmptyBorder(10, 50, 10, 50));
+        JTextArea meanArea = new JTextArea(10, 60);
+        meanArea.setLineWrap(true);
+        meanArea.setWrapStyleWord(true);
         JLabel meanLabel = new JLabel("Mean: ");
-        JScrollPane scroll = new JScrollPane(meanField);
+        JScrollPane scroll = new JScrollPane(meanArea);
         scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        outputText.add(meanLabel);
-        outputText.add(scroll);
+        meanText.add(meanLabel);
+        meanText.add(scroll);
 
         JButton add = new JButton("Add");
         add.setPreferredSize(new Dimension(100, 35));
         JButton update = new JButton("Update");
         update.setPreferredSize(new Dimension(100, 35));
-        outputText.add(add);
-        outputText.add(update);
+        meanText.add(add);
+        meanText.add(update);
+
+        JPanel outputText = new JPanel();
+        outputText.setBorder(BorderFactory.createEmptyBorder(10, 20, 100, 240));
+        JTextArea outputArea= new JTextArea(5, 62);
+        outputArea.setLineWrap(true);
+        outputArea.setWrapStyleWord(true);
+        JLabel outputLabel = new JLabel("Output: ");
+        outputText.add(outputLabel);
+        outputText.add(outputArea);
 
         frame.getContentPane().add(BorderLayout.NORTH, inputText);
-        frame.getContentPane().add(BorderLayout.CENTER, outputText);
+        frame.getContentPane().add(BorderLayout.CENTER, meanText);
+        frame.getContentPane().add(BorderLayout.SOUTH, outputText);
         frame.pack();
         frame.setVisible(true);
 
@@ -63,17 +74,20 @@ public class ClientGUI {
         query.addActionListener(e -> {
             String word = wordField.getText();
             DictRequest request = new DictRequest(RequestType.QUERY, word, "");
-            String queryResult = client.sendRequest(request);
-            meanField.setText(queryResult);
+            DictResponse response = client.sendRequest(request);
+            meanArea.setText(response.getResult());
+            outputArea.setText(response.getMessage());
         });
 
         /* add action to the add button,
         and send the query request formatted from the client's input */
         add.addActionListener(e -> {
             String word = wordField.getText();
-            String mean = meanField.getText();
+            String mean = meanArea.getText();
             DictRequest request = new DictRequest(RequestType.ADD, word, mean);
-            client.sendRequest(request);
+            DictResponse response = client.sendRequest(request);
+            meanArea.setText("");
+            outputArea.setText(response.getMessage());
         });
 
         /* add action to the remove button,
@@ -81,16 +95,20 @@ public class ClientGUI {
         remove.addActionListener(e -> {
             String word = wordField.getText();
             DictRequest request = new DictRequest(RequestType.REMOVE, word, "");
-            client.sendRequest(request);
+            DictResponse response = client.sendRequest(request);
+            meanArea.setText("");
+            outputArea.setText(response.getMessage());
         });
 
         /* add action to the update button,
         and send the query request formatted from the client's input */
         update.addActionListener(e -> {
             String word = wordField.getText();
-            String mean = meanField.getText();
+            String mean = meanArea.getText();
             DictRequest request = new DictRequest(RequestType.UPDATE, word, mean);
-            client.sendRequest(request);
+            DictResponse response = client.sendRequest(request);
+            meanArea.setText("");
+            outputArea.setText(response.getMessage());
         });
     }
 

@@ -1,7 +1,7 @@
 package com.dictionary.server;
 
-import com.dictionary.util.DictRequest;
-import com.dictionary.util.DictResponse;
+import com.dictionary.utils.DictRequest;
+import com.dictionary.utils.DictResponse;
 
 import javax.swing.*;
 import java.io.*;
@@ -19,7 +19,7 @@ import org.json.simple.parser.ParseException;
  * @author Siqi Zhou
  * student id 903274
  */
-public class DictServer {
+public class DictionaryServer {
     private static String dictionary;
     private static ServerGUI serverGUI;
     private static JSONObject dict;
@@ -57,6 +57,8 @@ public class DictServer {
         serverGUI.setPort(String.valueOf(port));
 
         try {
+
+            /* use TCP/IP socket */
             ServerSocket socket = new ServerSocket(port);
             ExecutorService executor = Executors.newFixedThreadPool(5);
             Socket client;
@@ -84,15 +86,16 @@ public class DictServer {
         }
     }
 
-    private static class ClientServer implements Runnable {
-        InputStream inputStream;
-        OutputStream outputStream;
+    public static class ClientServer implements Runnable {
+        private final InputStream inputStream;
+        private final OutputStream outputStream;
         public ClientServer(InputStream inputStream, OutputStream outputStream)
                 throws IOException, ClassNotFoundException {
             this.inputStream = inputStream;
             this.outputStream = outputStream;
         }
 
+        @Override
         public void run() {
 
             try {
@@ -128,9 +131,11 @@ public class DictServer {
                         output.flush();
                     }
                     // all other types are unable to handle
-                    default -> JOptionPane.showMessageDialog
-                            (null, "Cannot resolve request type",
-                                    "Request Failed", JOptionPane.INFORMATION_MESSAGE);
+                    default -> {
+                        response.setMessage("Failed, Cannot resolve request type");
+                        output.writeObject(response);
+                        output.flush();
+                    }
                 }
                 serverGUI.updateLog("Client connected on " +
                         Thread.currentThread().getName() +
@@ -162,7 +167,7 @@ public class DictServer {
             response.setMessage("Failed, word does not exist in the dictionary!");
         } else {
             response.setResult(mean);
-            response.setMessage("Success!");
+            response.setMessage("Query Success!");
             response.setSuccess(true);
         }
         return response;
@@ -188,13 +193,10 @@ public class DictServer {
 
         dict.put(request.getWord(), request.getMean());
         try {
-            FileWriter writer = new FileWriter(dictionary);
-            writer.append(dict.toJSONString());
-            writer.flush();
             response.setSuccess(true);
-            response.setMessage("Success!");
+            response.setMessage("Add Success!");
             return response;
-        } catch (IOException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog
                     (null, "Error: " + e,
                             "Request Failed", JOptionPane.INFORMATION_MESSAGE);
@@ -220,13 +222,10 @@ public class DictServer {
         }
         dict.remove(request.getWord());
         try {
-            FileWriter writer = new FileWriter(dictionary);
-            writer.append(dict.toJSONString());
-            writer.flush();
             response.setSuccess(true);
-            response.setMessage("Success!");
+            response.setMessage("Remove Success!");
             return response;
-        } catch (IOException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog
                     (null, "Error: " + e,
                             "Request Failed", JOptionPane.INFORMATION_MESSAGE);
@@ -252,17 +251,30 @@ public class DictServer {
         }
         dict.replace(request.getWord(), request.getMean());
         try {
-            FileWriter writer = new FileWriter(dictionary);
-            writer.append(dict.toJSONString());
-            writer.flush();
             response.setSuccess(true);
-            response.setMessage("Success!");
+            response.setMessage("Update Success!");
             return response;
-        } catch (IOException e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog
                     (null, "Error: " + e,
                             "Request Failed", JOptionPane.INFORMATION_MESSAGE);
         }
         return response;
+    }
+
+    /**
+     * Stores the words from memory into the dictionary
+     */
+    public void storeInDictionary() {
+        try {
+            FileWriter writer = new FileWriter(dictionary);
+            writer.append(dict.toJSONString());
+            writer.flush();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog
+                    (null, "Error: " + e,
+                            "Write to dictionary failed",
+                            JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 }
