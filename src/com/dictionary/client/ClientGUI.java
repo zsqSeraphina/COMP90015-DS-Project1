@@ -6,8 +6,6 @@ import com.dictionary.utils.RequestType;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +82,8 @@ public class ClientGUI {
         JTextArea outputArea= new JTextArea(5, 62);
         outputArea.setLineWrap(true);
         outputArea.setWrapStyleWord(true);
+        outputArea.setEnabled(false);
+        outputArea.setDisabledTextColor(new Color(0, 0, 0));
         JLabel outputLabel = new JLabel("Output: ");
         outputText.add(outputLabel);
         outputText.add(outputArea);
@@ -187,6 +187,18 @@ public class ClientGUI {
             }
             DictRequest request = new DictRequest(RequestType.ADD, word, meanStrings);
             DictResponse response = client.sendRequest(request);
+            for (Component component : meanPanel.getComponents()) {
+                meanPanel.remove(component);
+            }
+            JTextArea meanArea1 = new JTextArea(3, 60);
+            meanArea1.setLineWrap(true);
+            meanArea1.setWrapStyleWord(true);
+            JScrollPane scroll1 = new JScrollPane(meanArea1);
+            scroll1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            meanPanel.setLayout(new GridLayout(1, 1));
+            meanPanel.add(scroll1);
+            meanPanel.revalidate();
+            meanPanel.repaint();
             outputArea.setText(response.getMessage());
         });
 
@@ -196,6 +208,18 @@ public class ClientGUI {
             String word = wordField.getText();
             DictRequest request = new DictRequest(RequestType.REMOVE, word, new ArrayList<>(1));
             DictResponse response = client.sendRequest(request);
+            for (Component component : meanPanel.getComponents()) {
+                meanPanel.remove(component);
+            }
+            JTextArea meanArea1 = new JTextArea(3, 60);
+            meanArea1.setLineWrap(true);
+            meanArea1.setWrapStyleWord(true);
+            JScrollPane scroll1 = new JScrollPane(meanArea1);
+            scroll1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            meanPanel.setLayout(new GridLayout(1, 1));
+            meanPanel.add(scroll1);
+            meanPanel.revalidate();
+            meanPanel.repaint();
             outputArea.setText(response.getMessage());
         });
 
@@ -209,6 +233,18 @@ public class ClientGUI {
             }
             DictRequest request = new DictRequest(RequestType.UPDATE, word, meanStrings);
             DictResponse response = client.sendRequest(request);
+            for (Component component : meanPanel.getComponents()) {
+                meanPanel.remove(component);
+            }
+            JTextArea meanArea1 = new JTextArea(3, 60);
+            meanArea1.setLineWrap(true);
+            meanArea1.setWrapStyleWord(true);
+            JScrollPane scroll1 = new JScrollPane(meanArea1);
+            scroll1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+            meanPanel.setLayout(new GridLayout(1, 1));
+            meanPanel.add(scroll1);
+            meanPanel.revalidate();
+            meanPanel.repaint();
             outputArea.setText(response.getMessage());
         });
     }

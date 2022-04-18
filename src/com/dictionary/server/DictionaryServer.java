@@ -5,7 +5,6 @@ import com.dictionary.utils.DictResponse;
 
 import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
