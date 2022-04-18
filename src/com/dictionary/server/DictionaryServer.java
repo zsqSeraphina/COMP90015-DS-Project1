@@ -193,7 +193,7 @@ public class DictionaryServer {
             return response;
         }
 
-        if (request.getWord().isBlank() || request.getMean().isEmpty()) {
+        if (request.getWord().isBlank() || request.getMean().stream().anyMatch(String::isBlank)) {
             response.setMessage("Failed, please enter the word or meaning!");
             return response;
         }
@@ -248,7 +248,7 @@ public class DictionaryServer {
      */
     private static DictResponse handleUpdate(DictRequest request) {
         DictResponse response = new DictResponse();
-        if (request.getWord().isBlank() || request.getMean().isEmpty()) {
+        if (request.getWord().isBlank() || request.getMean().stream().anyMatch(String::isBlank)) {
             response.setMessage("Failed, please enter the word or meaning!");
             return response;
         }
